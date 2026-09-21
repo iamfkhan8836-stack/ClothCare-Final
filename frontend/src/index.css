@@ -1,0 +1,286 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #eaf6ea;
+  color: #173b2a;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+nav h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #267a35;
+}
+
+nav div {
+  display: flex;
+  gap: 25px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #173b2a;
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: #2e7d32;
+}
+
+section {
+  text-align: center;
+  padding: 70px 20px;
+}
+
+section h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+section p {
+  font-size: 18px;
+  color: #526b5b;
+  max-width: 700px;
+  margin: 15px auto;
+  line-height: 1.6;
+}
+
+button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 8px;
+}
+
+button:hover {
+  background: #256628;
+}
+
+section:nth-of-type(2) {
+  background: white;
+}
+
+section:nth-of-type(2) h2 {
+  font-size: 34px;
+  margin-bottom: 40px;
+}
+
+section:nth-of-type(2) h3 {
+  font-size: 22px;
+  margin-top: 25px;
+}
+
+.login-page {
+  min-height: 100vh;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.login-page h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.login-page > p {
+  color: #526b5b;
+  font-size: 18px;
+  margin-bottom: 35px;
+}
+
+form {
+  background: white;
+  width: 500px;
+  max-width: 100%;
+  margin: auto;
+  padding: 38px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+form button {
+  width: 100%;
+  margin: 5px 0 0;
+}
+
+.login-page > div {
+  margin-top: 25px;
+}
+
+@media (max-width: 600px) {
+  nav {
+    padding: 18px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  nav div {
+    gap: 15px;
+  }
+
+  section h1 {
+    font-size: 36px;
+  }
+
+  form {
+    padding: 25px;
+  }
+}
+.donations-container {
+  width: 700px;
+  max-width: 100%;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.donation-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+.donation-card h2 {
+  margin-top: 0;
+  color: #267a35;
+}
+
+.donation-card p {
+  margin: 10px 0;
+  color: #526b5b;
+}
+
+.donation-card strong {
+  color: #173b2a;
+}
+/* Dashboard */
+
+.dashboard-page {
+  min-height: 100vh;
+  padding: 60px 30px;
+  background: #eaf6ea;
+}
+
+.dashboard-header {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.dashboard-header p {
+  font-size: 18px;
+  color: #526b5b;
+}
+
+.dashboard-stats {
+  max-width: 1100px;
+  margin: 0 auto 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h2 {
+  font-size: 32px;
+  color: #2e7d32;
+  margin: 0 0 10px;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #526b5b;
+}
+
+.dashboard-actions {
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.dashboard-actions h2 {
+  margin-top: 0;
+  font-size: 30px;
+}
+
+.dashboard-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  max-width: 700px;
+  margin: 25px auto 0;
+}
+
+.dashboard-buttons a {
+  text-decoration: none;
+}
+
+.dashboard-buttons button {
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+}
+
+@media (max-width: 700px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 32px;
+  }
+}
