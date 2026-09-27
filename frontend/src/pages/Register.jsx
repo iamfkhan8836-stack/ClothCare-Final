@@ -20,7 +20,7 @@ function Register() {
 
     try {
       const response = await fetch(
-        'http://http://192.168.0.104:5000/register',
+        'http://localhost:5000/register',
         {
           method: 'POST',
           headers: {
@@ -43,6 +43,7 @@ function Register() {
 
       alert('Account created successfully!')
       navigate('/login')
+
     } catch (error) {
       console.error(error)
       alert('Cannot connect to ClothCare server.')
@@ -87,7 +88,6 @@ function Register() {
 
         </div>
 
-
         <div className="register-card">
 
           <div className="auth-heading">
@@ -107,7 +107,6 @@ function Register() {
 
           </div>
 
-
           <form onSubmit={handleSubmit}>
 
             <div className="input-group">
@@ -125,7 +124,6 @@ function Register() {
 
             </div>
 
-
             <div className="input-group">
 
               <label>
@@ -140,7 +138,6 @@ function Register() {
               />
 
             </div>
-
 
             <div className="input-group">
 
@@ -161,7 +158,6 @@ function Register() {
 
             </div>
 
-
             <div className="input-group">
 
               <label>
@@ -181,7 +177,6 @@ function Register() {
 
             </div>
 
-
             <button
               className="auth-button"
               type="submit"
@@ -194,7 +189,6 @@ function Register() {
 
           </form>
 
-
           <div className="auth-divider">
 
             <span></span>
@@ -204,7 +198,6 @@ function Register() {
             <span></span>
 
           </div>
-
 
           <p className="auth-register">
 
@@ -217,7 +210,6 @@ function Register() {
           </p>
 
         </div>
-
 
         <p className="auth-footer">
           © 2026 ClothCare · Give clothes a second life.

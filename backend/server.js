@@ -3,6 +3,7 @@ const cors = require('cors')
 const mysql = require('mysql2/promise')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 require('dotenv').config()
 
 const app = express()
@@ -21,8 +22,10 @@ const db = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  ssl: {
+  minVersion: 'TLSv1.2',
+},
 })
-
 
 /* =========================
    JWT

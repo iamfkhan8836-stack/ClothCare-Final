@@ -20,29 +20,22 @@ function AdminDashboard() {
   const [distributionLoading, setDistributionLoading] =
     useState(false)
 
-  const [distributionForm, setDistributionForm] =
-    useState({
-      donation_id: '',
-      quantity: '',
-      recipient: '',
-      distribution_date: '',
-      notes: '',
-    })
+  const [distributionForm, setDistributionForm] = useState({
+    donation_id: '',
+    quantity: '',
+    recipient: '',
+    distribution_date: '',
+    notes: '',
+  })
 
-  const token = localStorage.getItem(
-    'clothcareToken'
-  )
+  const token = localStorage.getItem('clothcareToken')
 
   useEffect(() => {
     const user = JSON.parse(
       localStorage.getItem('clothcareUser')
     )
 
-    if (
-      !token ||
-      !user ||
-      user.role !== 'admin'
-    ) {
+    if (!token || !user || user.role !== 'admin') {
       navigate('/dashboard', {
         replace: true,
       })
@@ -63,27 +56,27 @@ function AdminDashboard() {
           distributionsResponse,
         ] = await Promise.all([
           fetch(
-            'http://http://192.168.0.104:5000/admin/dashboard',
+            'http://localhost:5000/admin/dashboard',
             { headers }
           ),
 
           fetch(
-            'http://http://192.168.0.104:5000/admin/users',
+            'http://localhost:5000/admin/users',
             { headers }
           ),
 
           fetch(
-            'http://http://192.168.0.104:5000/admin/donations',
+            'http://localhost:5000/admin/donations',
             { headers }
           ),
 
           fetch(
-            'http://http://192.168.0.104:5000/admin/pickups',
+            'http://localhost:5000/admin/pickups',
             { headers }
           ),
 
           fetch(
-            'http://http://192.168.0.104:5000/admin/distributions',
+            'http://localhost:5000/admin/distributions',
             { headers }
           ),
         ])
@@ -118,14 +111,9 @@ function AdminDashboard() {
         setDonations(donationsData)
         setPickups(pickupsData)
 
-        if (
-          distributionsResponse.ok
-        ) {
-          setDistributions(
-            distributionsData
-          )
+        if (distributionsResponse.ok) {
+          setDistributions(distributionsData)
         }
-
       } catch (error) {
         console.error(
           'Admin dashboard error:',
@@ -137,18 +125,13 @@ function AdminDashboard() {
     }
 
     fetchAdminData()
-
   }, [navigate, token])
-
 
   /* =========================
      UPDATE PICKUP STATUS
      ========================= */
 
-  const updatePickupStatus = async (
-    id,
-    status
-  ) => {
+  const updatePickupStatus = async (id, status) => {
     try {
       const response = await fetch(
         `http://localhost:5000/admin/pickups/${id}/status`,
@@ -176,19 +159,16 @@ function AdminDashboard() {
         return
       }
 
-      setPickups(
-        (currentPickups) =>
-          currentPickups.map(
-            (pickup) =>
-              pickup.id === id
-                ? {
-                    ...pickup,
-                    status: status,
-                  }
-                : pickup
-          )
+      setPickups((currentPickups) =>
+        currentPickups.map((pickup) =>
+          pickup.id === id
+            ? {
+                ...pickup,
+                status: status,
+              }
+            : pickup
+        )
       )
-
     } catch (error) {
       console.error(error)
 
@@ -198,35 +178,27 @@ function AdminDashboard() {
     }
   }
 
-
   /* =========================
      DISTRIBUTION FORM
      ========================= */
 
-  const handleDistributionChange = (
-    e
-  ) => {
+  const handleDistributionChange = (e) => {
     const {
       name,
       value,
     } = e.target
 
-    setDistributionForm(
-      (currentForm) => ({
-        ...currentForm,
-        [name]: value,
-      })
-    )
+    setDistributionForm((currentForm) => ({
+      ...currentForm,
+      [name]: value,
+    }))
   }
-
 
   /* =========================
      RECORD DISTRIBUTION
      ========================= */
 
-  const handleDistributionSubmit = async (
-    e
-  ) => {
+  const handleDistributionSubmit = async (e) => {
     e.preventDefault()
 
     const {
@@ -252,8 +224,7 @@ function AdminDashboard() {
     const selectedDonation =
       donations.find(
         (donation) =>
-          donation.id ===
-          Number(donation_id)
+          donation.id === Number(donation_id)
       )
 
     if (!selectedDonation) {
@@ -286,25 +257,16 @@ function AdminDashboard() {
           },
 
           body: JSON.stringify({
-            donation_id:
-              Number(donation_id),
-
-            quantity:
-              Number(quantity),
-
-            recipient:
-              recipient.trim(),
-
+            donation_id: Number(donation_id),
+            quantity: Number(quantity),
+            recipient: recipient.trim(),
             distribution_date,
-
-            notes:
-              notes.trim(),
+            notes: notes.trim(),
           }),
         }
       )
 
-      const data =
-        await response.json()
+      const data = await response.json()
 
       if (!response.ok) {
         alert(
@@ -313,7 +275,6 @@ function AdminDashboard() {
         )
         return
       }
-
 
       /* Refresh distribution records */
 
@@ -331,14 +292,11 @@ function AdminDashboard() {
       const distributionsData =
         await distributionsResponse.json()
 
-      if (
-        distributionsResponse.ok
-      ) {
+      if (distributionsResponse.ok) {
         setDistributions(
           distributionsData
         )
       }
-
 
       /* Clear form */
 
@@ -361,7 +319,6 @@ function AdminDashboard() {
     }
   }
 
-
   /* =========================
      FORMAT DATE
      ========================= */
@@ -371,9 +328,7 @@ function AdminDashboard() {
       return 'N/A'
     }
 
-    return new Date(
-      date
-    ).toLocaleDateString(
+    return new Date(date).toLocaleDateString(
       'en-IN',
       {
         day: '2-digit',
@@ -383,7 +338,6 @@ function AdminDashboard() {
     )
   }
 
-
   /* =========================
      LOADING
      ========================= */
@@ -391,17 +345,14 @@ function AdminDashboard() {
   if (loading) {
     return (
       <div className="form-page">
-
         <div className="empty-donations">
           <p>
             Loading admin dashboard...
           </p>
         </div>
-
       </div>
     )
   }
-
 
   /* =========================
      PAGE
@@ -412,10 +363,7 @@ function AdminDashboard() {
 
       <div className="form-container dashboard-page">
 
-
-        {/* =========================
-           HEADER
-           ========================= */}
+        {/* HEADER */}
 
         <div className="dashboard-header">
 
@@ -435,10 +383,7 @@ function AdminDashboard() {
 
         </div>
 
-
-        {/* =========================
-           STATISTICS
-           ========================= */}
+        {/* STATISTICS */}
 
         <div className="dashboard-stats">
 
@@ -458,7 +403,6 @@ function AdminDashboard() {
 
           </div>
 
-
           <div className="stat-card">
 
             <span>
@@ -475,7 +419,6 @@ function AdminDashboard() {
 
           </div>
 
-
           <div className="stat-card">
 
             <span>
@@ -491,7 +434,6 @@ function AdminDashboard() {
             </p>
 
           </div>
-
 
           <div className="stat-card">
 
@@ -511,10 +453,7 @@ function AdminDashboard() {
 
         </div>
 
-
-        {/* =========================
-           USERS
-           ========================= */}
+        {/* USERS */}
 
         <section className="admin-section">
 
@@ -530,22 +469,18 @@ function AdminDashboard() {
 
           </div>
 
-
           <div className="admin-table-wrapper">
 
             <table className="admin-table">
 
               <thead>
-
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Role</th>
                 </tr>
-
               </thead>
-
 
               <tbody>
 
@@ -569,8 +504,7 @@ function AdminDashboard() {
 
                       <span
                         className={
-                          user.role ===
-                          'admin'
+                          user.role === 'admin'
                             ? 'admin-badge'
                             : 'user-badge'
                         }
@@ -592,10 +526,7 @@ function AdminDashboard() {
 
         </section>
 
-
-        {/* =========================
-           DONATIONS
-           ========================= */}
+        {/* DONATIONS */}
 
         <section className="admin-section">
 
@@ -611,13 +542,11 @@ function AdminDashboard() {
 
           </div>
 
-
           <div className="admin-table-wrapper">
 
             <table className="admin-table">
 
               <thead>
-
                 <tr>
                   <th>ID</th>
                   <th>User</th>
@@ -626,69 +555,51 @@ function AdminDashboard() {
                   <th>Condition</th>
                   <th>Date</th>
                 </tr>
-
               </thead>
-
 
               <tbody>
 
-                {donations.map(
-                  (donation) => (
+                {donations.map((donation) => (
 
-                    <tr
-                      key={
-                        donation.id
-                      }
-                    >
+                  <tr key={donation.id}>
 
-                      <td>
-                        #{donation.id}
-                      </td>
+                    <td>
+                      #{donation.id}
+                    </td>
 
-                      <td>
+                    <td>
 
-                        <strong>
-                          {
-                            donation.user_name
-                          }
-                        </strong>
+                      <strong>
+                        {donation.user_name}
+                      </strong>
 
-                        <small>
-                          {
-                            donation.user_email
-                          }
-                        </small>
+                      <small>
+                        {donation.user_email}
+                      </small>
 
-                      </td>
+                    </td>
 
-                      <td>
-                        {
-                          donation.clothing_type
-                        }
-                      </td>
+                    <td>
+                      {donation.clothing_type}
+                    </td>
 
-                      <td>
-                        {
-                          donation.quantity
-                        }
-                      </td>
+                    <td>
+                      {donation.quantity}
+                    </td>
 
-                      <td>
-                        {
-                          donation.condition_type
-                        }
-                      </td>
+                    <td>
+                      {donation.condition_type}
+                    </td>
 
-                      <td>
-                        {formatDate(
-                          donation.donation_date
-                        )}
-                      </td>
+                    <td>
+                      {formatDate(
+                        donation.donation_date
+                      )}
+                    </td>
 
-                    </tr>
+                  </tr>
 
-                  )
-                )}
+                ))}
 
               </tbody>
 
@@ -698,10 +609,7 @@ function AdminDashboard() {
 
         </section>
 
-
-        {/* =========================
-           PICKUPS
-           ========================= */}
+        {/* PICKUPS */}
 
         <section className="admin-section">
 
@@ -717,13 +625,11 @@ function AdminDashboard() {
 
           </div>
 
-
           <div className="admin-table-wrapper">
 
             <table className="admin-table">
 
               <thead>
-
                 <tr>
                   <th>ID</th>
                   <th>User</th>
@@ -732,104 +638,84 @@ function AdminDashboard() {
                   <th>Date</th>
                   <th>Status</th>
                 </tr>
-
               </thead>
-
 
               <tbody>
 
-                {pickups.map(
-                  (pickup) => (
+                {pickups.map((pickup) => (
 
-                    <tr
-                      key={
-                        pickup.id
-                      }
-                    >
+                  <tr key={pickup.id}>
 
-                      <td>
-                        #{pickup.id}
-                      </td>
+                    <td>
+                      #{pickup.id}
+                    </td>
 
-                      <td>
+                    <td>
 
-                        <strong>
-                          {
-                            pickup.user_name
-                          }
-                        </strong>
+                      <strong>
+                        {pickup.user_name}
+                      </strong>
 
-                        <small>
-                          {
-                            pickup.user_email
-                          }
-                        </small>
+                      <small>
+                        {pickup.user_email}
+                      </small>
 
-                      </td>
+                    </td>
 
-                      <td>
-                        {
-                          pickup.address
+                    <td>
+                      {pickup.address}
+                    </td>
+
+                    <td>
+                      {pickup.phone}
+                    </td>
+
+                    <td>
+                      {formatDate(
+                        pickup.pickup_date
+                      )}
+                    </td>
+
+                    <td>
+
+                      <select
+                        value={pickup.status}
+                        onChange={(e) =>
+                          updatePickupStatus(
+                            pickup.id,
+                            e.target.value
+                          )
                         }
-                      </td>
+                        className="status-select"
+                      >
 
-                      <td>
-                        {
-                          pickup.phone
-                        }
-                      </td>
+                        <option value="Pending">
+                          Pending
+                        </option>
 
-                      <td>
-                        {formatDate(
-                          pickup.pickup_date
-                        )}
-                      </td>
+                        <option value="Confirmed">
+                          Confirmed
+                        </option>
 
-                      <td>
+                        <option value="Picked Up">
+                          Picked Up
+                        </option>
 
-                        <select
-                          value={
-                            pickup.status
-                          }
-                          onChange={(
-                            e
-                          ) =>
-                            updatePickupStatus(
-                              pickup.id,
-                              e.target.value
-                            )
-                          }
-                          className="status-select"
-                        >
+                        <option value="Completed">
+                          Completed
+                        </option>
 
-                          <option value="Pending">
-                            Pending
-                          </option>
+                        <option value="Cancelled">
+                          Cancelled
+                        </option>
 
-                          <option value="Confirmed">
-                            Confirmed
-                          </option>
+                      </select>
 
-                          <option value="Picked Up">
-                            Picked Up
-                          </option>
+                    </td>
 
-                          <option value="Completed">
-                            Completed
-                          </option>
+                  </tr>
 
-                          <option value="Cancelled">
-                            Cancelled
-                          </option>
-
-                        </select>
-
-                      </td>
-
-                    </tr>
-
-                  )
-                )}
+                ))}
 
               </tbody>
 
@@ -839,10 +725,7 @@ function AdminDashboard() {
 
         </section>
 
-
-        {/* =========================
-           DISTRIBUTION
-           ========================= */}
+        {/* DISTRIBUTION */}
 
         <section className="admin-section">
 
@@ -858,7 +741,6 @@ function AdminDashboard() {
 
           </div>
 
-
           {/* Distribution Form */}
 
           <div className="distribution-form-card">
@@ -870,9 +752,6 @@ function AdminDashboard() {
             >
 
               <div className="distribution-form-grid">
-
-
-                {/* Donation */}
 
                 <div className="input-group">
 
@@ -899,21 +778,14 @@ function AdminDashboard() {
                       (donation) => (
 
                         <option
-                          key={
-                            donation.id
-                          }
-                          value={
-                            donation.id
-                          }
+                          key={donation.id}
+                          value={donation.id}
                         >
                           #{donation.id} -{' '}
-                          {
-                            donation.clothing_type
-                          }{' '}
+                          {donation.clothing_type}{' '}
                           (
-                          {
-                            donation.quantity
-                          } items)
+                          {donation.quantity}
+                          {' '}items)
                         </option>
 
                       )
@@ -922,9 +794,6 @@ function AdminDashboard() {
                   </select>
 
                 </div>
-
-
-                {/* Quantity */}
 
                 <div className="input-group">
 
@@ -948,9 +817,6 @@ function AdminDashboard() {
 
                 </div>
 
-
-                {/* Recipient */}
-
                 <div className="input-group">
 
                   <label>
@@ -971,9 +837,6 @@ function AdminDashboard() {
                   />
 
                 </div>
-
-
-                {/* Date */}
 
                 <div className="input-group">
 
@@ -997,9 +860,6 @@ function AdminDashboard() {
 
               </div>
 
-
-              {/* Notes */}
-
               <div className="input-group">
 
                 <label>
@@ -1020,7 +880,6 @@ function AdminDashboard() {
 
               </div>
 
-
               <button
                 type="submit"
                 className="form-submit-button"
@@ -1036,7 +895,6 @@ function AdminDashboard() {
             </form>
 
           </div>
-
 
           {/* Distribution Records */}
 
@@ -1058,7 +916,6 @@ function AdminDashboard() {
 
               </thead>
 
-
               <tbody>
 
                 {distributions.length === 0 ? (
@@ -1068,8 +925,7 @@ function AdminDashboard() {
                     <td
                       colSpan="7"
                       style={{
-                        textAlign:
-                          'center',
+                        textAlign: 'center',
                       }}
                     >
                       No distribution
@@ -1084,9 +940,7 @@ function AdminDashboard() {
                     (distribution) => (
 
                       <tr
-                        key={
-                          distribution.id
-                        }
+                        key={distribution.id}
                       >
 
                         <td>
@@ -1094,39 +948,29 @@ function AdminDashboard() {
                         </td>
 
                         <td>
-                          #{distribution.donation_id}{' '}
-                          -{' '}
-                          {
-                            distribution.clothing_type
-                          }
+                          #{distribution.donation_id}
+                          {' - '}
+                          {distribution.clothing_type}
                         </td>
 
                         <td>
 
                           <strong>
-                            {
-                              distribution.user_name
-                            }
+                            {distribution.user_name}
                           </strong>
 
                           <small>
-                            {
-                              distribution.user_email
-                            }
+                            {distribution.user_email}
                           </small>
 
                         </td>
 
                         <td>
-                          {
-                            distribution.quantity
-                          }
+                          {distribution.quantity}
                         </td>
 
                         <td>
-                          {
-                            distribution.recipient
-                          }
+                          {distribution.recipient}
                         </td>
 
                         <td>
@@ -1136,10 +980,8 @@ function AdminDashboard() {
                         </td>
 
                         <td>
-                          {
-                            distribution.notes ||
-                            '—'
-                          }
+                          {distribution.notes ||
+                            '—'}
                         </td>
 
                       </tr>
@@ -1156,7 +998,6 @@ function AdminDashboard() {
           </div>
 
         </section>
-
 
       </div>
 

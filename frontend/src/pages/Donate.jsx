@@ -13,9 +13,7 @@ function Donate() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+    const token = localStorage.getItem('clothcareToken')
 
     if (!token) {
       alert('Please login first.')
@@ -23,11 +21,7 @@ function Donate() {
       return
     }
 
-    if (
-      !clothingType ||
-      !quantity ||
-      !condition
-    ) {
+    if (!clothingType || !quantity || !condition) {
       alert('Please fill all required fields.')
       return
     }
@@ -59,17 +53,9 @@ function Donate() {
           response.status === 401 ||
           response.status === 403
         ) {
-          localStorage.removeItem(
-            'clothcareToken'
-          )
-
-          localStorage.removeItem(
-            'clothcareUser'
-          )
-
-          localStorage.removeItem(
-            'clothcareLoggedIn'
-          )
+          localStorage.removeItem('clothcareToken')
+          localStorage.removeItem('clothcareUser')
+          localStorage.removeItem('clothcareLoggedIn')
 
           navigate('/login')
           return
@@ -138,7 +124,6 @@ function Donate() {
                 }
                 required
               >
-
                 <option value="">
                   Select clothing type
                 </option>
@@ -166,7 +151,6 @@ function Donate() {
                 <option value="Other">
                   Other
                 </option>
-
               </select>
 
             </div>
@@ -203,7 +187,6 @@ function Donate() {
                 }
                 required
               >
-
                 <option value="">
                   Select condition
                 </option>
@@ -219,7 +202,6 @@ function Donate() {
                 <option value="Fair">
                   Fair
                 </option>
-
               </select>
 
             </div>
@@ -246,11 +228,9 @@ function Donate() {
               type="submit"
               disabled={loading}
             >
-
               {loading
                 ? 'Submitting Donation...'
                 : 'Submit Donation →'}
-
             </button>
 
           </form>

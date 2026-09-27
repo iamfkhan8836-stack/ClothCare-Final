@@ -8,9 +8,7 @@ function MyDonations() {
   const [loading, setLoading] = useState(true)
 
   const fetchDonations = async () => {
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+    const token = localStorage.getItem('clothcareToken')
 
     if (!token) {
       navigate('/login')
@@ -54,9 +52,11 @@ function MyDonations() {
 
     } catch (error) {
       console.error(error)
+
       alert(
         'Cannot connect to ClothCare server.'
       )
+
     } finally {
       setLoading(false)
     }
@@ -73,9 +73,7 @@ function MyDonations() {
 
     if (!confirmDelete) return
 
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+    const token = localStorage.getItem('clothcareToken')
 
     if (!token) {
       navigate('/login')
@@ -100,6 +98,7 @@ function MyDonations() {
           data.message ||
           'Failed to delete donation.'
         )
+
         return
       }
 
@@ -112,6 +111,7 @@ function MyDonations() {
 
     } catch (error) {
       console.error(error)
+
       alert(
         'Cannot connect to ClothCare server.'
       )

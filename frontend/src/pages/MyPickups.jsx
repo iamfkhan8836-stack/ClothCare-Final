@@ -7,79 +7,75 @@ function MyPickups() {
   const [pickups, setPickups] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+  const token = localStorage.getItem('clothcareToken')
 
+  useEffect(() => {
+    fetchPickups()
+  }, [])
+
+  const fetchPickups = async () => {
     if (!token) {
       navigate('/login')
       return
     }
 
-    const fetchPickups = async () => {
-      try {
-        const response = await fetch(
-          'http://localhost:5000/pickups',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+    try {
+      const response = await fetch(
+        'http://localhost:5000/pickups',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
 
-        const data = await response.json()
+      const data = await response.json()
 
-        if (!response.ok) {
-          if (
-            response.status === 401 ||
-            response.status === 403
-          ) {
-            localStorage.removeItem('clothcareToken')
-            localStorage.removeItem('clothcareUser')
-            localStorage.removeItem('clothcareLoggedIn')
+      if (!response.ok) {
+        if (
+          response.status === 401 ||
+          response.status === 403
+        ) {
+          localStorage.removeItem('clothcareToken')
+          localStorage.removeItem('clothcareUser')
+          localStorage.removeItem('clothcareLoggedIn')
 
-            navigate('/login')
-            return
-          }
-
-          alert(
-            data.message ||
-            'Failed to load pickup requests.'
-          )
-
+          navigate('/login')
           return
         }
 
-        setPickups(data)
-
-      } catch (error) {
-        console.error(error)
-
         alert(
-          'Cannot connect to ClothCare server.'
+          data.message ||
+          'Failed to load pickup requests.'
         )
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    fetchPickups()
-  }, [navigate])
+        return
+      }
+
+      setPickups(
+        Array.isArray(data)
+          ? data
+          : data.pickups || []
+      )
+
+    } catch (error) {
+      console.error(error)
+
+      alert(
+        'Cannot connect to ClothCare server.'
+      )
+
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const deletePickup = async (id) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this pickup request?'
-    )
-
-    if (!confirmDelete) return
-
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
-
-    if (!token) {
-      navigate('/login')
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this pickup request?'
+      )
+    ) {
       return
     }
 
@@ -99,16 +95,17 @@ function MyPickups() {
       if (!response.ok) {
         alert(
           data.message ||
-          'Failed to delete pickup request.'
+          'Failed to delete pickup.'
         )
+
         return
       }
 
-      setPickups((currentPickups) =>
-        currentPickups.filter(
-          (pickup) =>
-            pickup.id !== id
-        )
+      setPickups(
+        currentPickups =>
+          currentPickups.filter(
+            pickup => pickup.id !== id
+          )
       )
 
     } catch (error) {
@@ -134,155 +131,106 @@ function MyPickups() {
   }
 
   return (
-    <div className="form-page">
+    <div className="page-container">
 
-      <div className="form-container pickups-page">
+      <div
+        className="page-header"
+        style={{
+          textAlign: 'center',
+          width: '100%',
+          margin: '0 auto 30px',
+        }}
+      >
 
-        <div className="form-header">
+        <p className="section-label">
+          COLLECTION REQUESTS
+        </p>
 
-          <span>
-            COLLECTION REQUESTS
-          </span>
+        <h1>
+          My Pickup Requests
+        </h1>
 
-          <h1>
-            My Pickup Requests
-          </h1>
+        <p>
+          View and track your clothing pickup requests.
+        </p>
 
-          <p>
-            View and track your clothing pickup requests.
-          </p>
+      </div>
 
-        </div>
+      <div
+        className="content-card"
+        style={{
+          width: '100%',
+          maxWidth: '1100px',
+          margin: '0 auto',
+        }}
+      >
 
         {loading ? (
 
-          <div className="empty-donations">
-            <p>
-              Loading pickup requests...
-            </p>
-          </div>
+          <p style={{ textAlign: 'center' }}>
+            Loading pickup requests...
+          </p>
 
         ) : pickups.length === 0 ? (
 
-          <div className="empty-donations">
-
-            <div className="empty-icon">
-              🚚
-            </div>
-
-            <h3>
-              No pickup requests yet
-            </h3>
-
-            <p>
-              Request a pickup when you're ready
-              to donate your clothes.
-            </p>
-
-            <button
-              className="form-submit-button"
-              onClick={() =>
-                navigate('/pickup')
-              }
-            >
-              Request Pickup →
-            </button>
-
-          </div>
+          <p style={{ textAlign: 'center' }}>
+            No pickup requests found.
+          </p>
 
         ) : (
 
-          <div className="donations-grid">
+          <div
+            className="pickup-list"
+            style={{
+              width: '100%',
+              maxWidth: '1100px',
+              margin: '0 auto',
+            }}
+          >
 
             {pickups.map((pickup) => (
 
               <div
-                className="donation-item pickup-item"
+                className="pickup-card"
                 key={pickup.id}
               >
 
-                <div className="donation-top">
+                <h3>
+                  Pickup Request #{pickup.id}
+                </h3>
 
-                  <div className="donation-icon pickup-icon">
-                    🚚
-                  </div>
+                <p>
+                  <strong>Address:</strong>{' '}
+                  {pickup.address}
+                </p>
 
-                  <div>
+                <p>
+                  <strong>Phone:</strong>{' '}
+                  {pickup.phone}
+                </p>
 
-                    <span className="donation-number">
-                      PICKUP REQUEST #{pickup.id}
-                    </span>
+                <p>
+                  <strong>Pickup Date:</strong>{' '}
+                  {formatDate(pickup.pickup_date)}
+                </p>
 
-                    <h3>
-                      Pickup Request
-                    </h3>
+                <p>
+                  <strong>Status:</strong>{' '}
+                  {pickup.status}
+                </p>
 
-                  </div>
+                {pickup.status === 'Pending' && (
 
-                </div>
+                  <button
+                    onClick={() =>
+                      deletePickup(pickup.id)
+                    }
+                    className="delete-btn"
+                  >
+                    Delete Request
+                  </button>
 
-                <div className="donation-details">
-
-                  <div className="donation-detail pickup-address">
-
-                    <span>
-                      Address
-                    </span>
-
-                    <strong>
-                      {pickup.address}
-                    </strong>
-
-                  </div>
-
-                  <div className="donation-detail">
-
-                    <span>
-                      Phone
-                    </span>
-
-                    <strong>
-                      {pickup.phone}
-                    </strong>
-
-                  </div>
-
-                  <div className="donation-detail">
-
-                    <span>
-                      Date
-                    </span>
-
-                    <strong>
-                      {formatDate(
-                        pickup.pickup_date
-                      )}
-                    </strong>
-
-                  </div>
-
-                </div>
-
-                <div className="pickup-status">
-
-                  <span>
-                    STATUS
-                  </span>
-
-                  <strong>
-                    {pickup.status}
-                  </strong>
-
-                </div>
-
-                <button
-                  className="donation-delete"
-                  onClick={() =>
-                    deletePickup(pickup.id)
-                  }
-                >
-                  Delete Pickup Request
-                </button>
+                )}
 
               </div>
 

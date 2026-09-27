@@ -5,6 +5,7 @@ function Dashboard() {
   const navigate = useNavigate()
 
   const [user, setUser] = useState(null)
+
   const [dashboard, setDashboard] = useState({
     totalDonations: 0,
     donationRecords: 0,
@@ -15,13 +16,8 @@ function Dashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(
-      'clothcareUser'
-    )
-
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+    const storedUser = localStorage.getItem('clothcareUser')
+    const token = localStorage.getItem('clothcareToken')
 
     if (!storedUser || !token) {
       navigate('/login')
@@ -32,43 +28,86 @@ function Dashboard() {
 
     const fetchDashboard = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:5000/dashboard',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        const [donationsResponse, pickupsResponse] =
+          await Promise.all([
+            fetch('http://localhost:5000/donations', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
 
-        const data = await response.json()
+            fetch('http://localhost:5000/pickups', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          ])
 
-        if (!response.ok) {
-          if (
-            response.status === 401 ||
-            response.status === 403
-          ) {
-            localStorage.removeItem(
-              'clothcareToken'
-            )
+        const donationsData =
+          await donationsResponse.json()
 
-            localStorage.removeItem(
-              'clothcareUser'
-            )
+        const pickupsData =
+          await pickupsResponse.json()
 
-            localStorage.removeItem(
-              'clothcareLoggedIn'
-            )
+        if (
+          donationsResponse.status === 401 ||
+          donationsResponse.status === 403 ||
+          pickupsResponse.status === 401 ||
+          pickupsResponse.status === 403
+        ) {
+          localStorage.removeItem('clothcareToken')
+          localStorage.removeItem('clothcareUser')
+          localStorage.removeItem('clothcareLoggedIn')
 
-            navigate('/login')
-            return
-          }
-
-          console.error(data.message)
+          navigate('/login')
           return
         }
 
-        setDashboard(data)
+        if (!donationsResponse.ok) {
+          console.error(
+            donationsData.message ||
+            'Failed to load donations'
+          )
+        }
+
+        if (!pickupsResponse.ok) {
+          console.error(
+            pickupsData.message ||
+            'Failed to load pickups'
+          )
+        }
+
+        const donations = Array.isArray(donationsData)
+          ? donationsData
+          : donationsData.donations || []
+
+        const pickups = Array.isArray(pickupsData)
+          ? pickupsData
+          : pickupsData.pickups || []
+
+        const totalClothes = donations.reduce(
+          (total, donation) =>
+            total +
+            Number(
+              donation.quantity ||
+              donation.qty ||
+              0
+            ),
+          0
+        )
+
+        const latestPickup =
+          pickups.length > 0
+            ? pickups[0]
+            : null
+
+        setDashboard({
+          totalDonations: totalClothes,
+          donationRecords: donations.length,
+          pickupRequests: pickups.length,
+          pickupStatus:
+            latestPickup?.status || 'None',
+        })
 
       } catch (error) {
         console.error(
@@ -86,14 +125,15 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="dashboard-page">
-        <h2>Loading dashboard...</h2>
+        <div className="dashboard-container">
+          <h2>Loading dashboard...</h2>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="dashboard-page">
-
       <div className="dashboard-container">
 
         <div className="dashboard-header">
@@ -103,13 +143,11 @@ function Dashboard() {
           </p>
 
           <h1>
-            Welcome back{' '}
-            {user?.name || 'User'} 👋
+            Welcome back {user?.name || 'User'} 👋
           </h1>
 
           <p>
-            Here's an overview of your
-            contributions.
+            Here's an overview of your contributions.
           </p>
 
         </div>
@@ -175,7 +213,6 @@ function Dashboard() {
         </div>
 
       </div>
-
     </div>
   )
 }

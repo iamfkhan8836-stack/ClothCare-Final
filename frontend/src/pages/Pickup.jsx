@@ -12,9 +12,7 @@ function Pickup() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const token = localStorage.getItem(
-      'clothcareToken'
-    )
+    const token = localStorage.getItem('clothcareToken')
 
     if (!token) {
       alert('Please login first.')
@@ -22,11 +20,7 @@ function Pickup() {
       return
     }
 
-    if (
-      !address.trim() ||
-      !phone.trim() ||
-      !pickupDate
-    ) {
+    if (!address.trim() || !phone.trim() || !pickupDate) {
       alert('Please fill all required fields.')
       return
     }
@@ -62,17 +56,9 @@ function Pickup() {
           response.status === 401 ||
           response.status === 403
         ) {
-          localStorage.removeItem(
-            'clothcareToken'
-          )
-
-          localStorage.removeItem(
-            'clothcareUser'
-          )
-
-          localStorage.removeItem(
-            'clothcareLoggedIn'
-          )
+          localStorage.removeItem('clothcareToken')
+          localStorage.removeItem('clothcareUser')
+          localStorage.removeItem('clothcareLoggedIn')
 
           navigate('/login')
           return

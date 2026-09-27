@@ -17,7 +17,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        'http://192.168.0.104:5000/login',
+        'http://localhost:5000/login',
         {
           method: 'POST',
           headers: {
