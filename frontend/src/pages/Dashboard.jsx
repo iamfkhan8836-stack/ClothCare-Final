@@ -30,13 +30,13 @@ function Dashboard() {
       try {
         const [donationsResponse, pickupsResponse] =
           await Promise.all([
-            fetch('http://localhost:5000/donations', {
+            fetch('https://clothcare.onrender.com/donations', {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }),
 
-            fetch('http://localhost:5000/pickups', {
+            fetch('https://clothcare.onrender.com/pickups', {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

@@ -17,7 +17,7 @@ function MyDonations() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/donations',
+        'https://clothcare.onrender.com/donations',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ function MyDonations() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/donations/${id}`,
+        `https://clothcare.onrender.com/donations/${id}`,
         {
           method: 'DELETE',
           headers: {

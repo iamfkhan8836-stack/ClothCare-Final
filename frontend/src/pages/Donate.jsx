@@ -30,7 +30,7 @@ function Donate() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/donations',
+        'https://clothcare.onrender.com/donations',
         {
           method: 'POST',
           headers: {

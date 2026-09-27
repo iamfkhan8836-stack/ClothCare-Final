@@ -34,7 +34,7 @@ function Pickup() {
       setLoading(true)
 
       const response = await fetch(
-        'http://localhost:5000/pickups',
+        'https://clothcare.onrender.com/pickups',
         {
           method: 'POST',
           headers: {

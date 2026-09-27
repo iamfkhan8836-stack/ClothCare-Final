@@ -21,7 +21,7 @@ function MyPickups() {
 
     try {
       const response = await fetch(
-        'http://localhost:5000/pickups',
+        'https://clothcare.onrender.com/pickups',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ function MyPickups() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/pickups/${id}`,
+        `https://clothcare.onrender.com/pickups/${id}`,
         {
           method: 'DELETE',
           headers: {

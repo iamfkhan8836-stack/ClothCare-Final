@@ -56,27 +56,27 @@ function AdminDashboard() {
           distributionsResponse,
         ] = await Promise.all([
           fetch(
-            'http://localhost:5000/admin/dashboard',
+            'https://clothcare.onrender.com/admin/dashboard',
             { headers }
           ),
 
           fetch(
-            'http://localhost:5000/admin/users',
+            'https://clothcare.onrender.com/admin/users',
             { headers }
           ),
 
           fetch(
-            'http://localhost:5000/admin/donations',
+            'https://clothcare.onrender.com/admin/donations',
             { headers }
           ),
 
           fetch(
-            'http://localhost:5000/admin/pickups',
+            'https://clothcare.onrender.com/admin/pickups',
             { headers }
           ),
 
           fetch(
-            'http://localhost:5000/admin/distributions',
+            'https://clothcare.onrender.com/admin/distributions',
             { headers }
           ),
         ])
@@ -134,7 +134,7 @@ function AdminDashboard() {
   const updatePickupStatus = async (id, status) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/admin/pickups/${id}/status`,
+        `https://clothcare.onrender.com/admin/pickups/${id}/status`,
         {
           method: 'PUT',
 
@@ -247,7 +247,7 @@ function AdminDashboard() {
       setDistributionLoading(true)
 
       const response = await fetch(
-        'http://localhost:5000/admin/distributions',
+        'https://clothcare.onrender.com/admin/distributions',
         {
           method: 'POST',
 
@@ -280,7 +280,7 @@ function AdminDashboard() {
 
       const distributionsResponse =
         await fetch(
-          'http://localhost:5000/admin/distributions',
+          'https://clothcare.onrender.com/admin/distributions',
           {
             headers: {
               Authorization:
