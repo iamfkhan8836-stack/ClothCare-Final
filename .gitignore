@@ -11,3 +11,6 @@ frontend/dist/
 
 # Logs
 *.log
+
+# TiDB SSL certificate
+backend/isrgrootx1.pem
